@@ -1,5 +1,5 @@
-# Papercut2SQL
-Parse and send Papercut print logs to a MySQL database.
+# PaperCut2SQL
+Parse and send PaperCut print logs to a MySQL database.
 
 ## Prerequisites:
 - MySQL Server
