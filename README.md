@@ -1,6 +1,8 @@
 # PaperCut2SQL
 Parse and send PaperCut print logs to a MySQL database.
 
+Note that PaperCut Print Logger will not log jobs that are using Branch Office Direct Printing.
+
 ## How to use:
 This script should be scheduled to run once a day after all print jobs for the day are completed. It will look in the PaperCut daily logs directory, pick the latest file, then parse and log it to a MySQL database.
 
