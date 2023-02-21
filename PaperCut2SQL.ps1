@@ -62,10 +62,10 @@ function doLog{
 $csv = gci -Path 'C:\Program Files (x86)\PaperCut Print Logger\logs\csv\daily' | sort LastWriteTime | select -Last 1
 $csv = "C:\Program Files (x86)\PaperCut Print Logger\logs\csv\daily\$csv"
 
-# Parse the CSV and convert it to an object
+# Get the CSV and convert it to an object
 $csvI = Get-Content -LiteralPath $csv | Select-Object -Skip 1 | ConvertFrom-Csv
 
-# Loop through the CSV and add rows to the database
+# Parse the CSV and add to the database
 foreach($job in $csvI){
     $pTime = $job.Time
     $pUser = $job.User
