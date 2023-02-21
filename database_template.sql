@@ -20,10 +20,11 @@ USE `printsrv`;
 -- Dumping structure for table printsrv.log_print
 CREATE TABLE IF NOT EXISTS `log_print` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `time` timestamp NOT NULL,
+  `time` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `user` text NOT NULL,
   `pages` int(11) NOT NULL DEFAULT 0,
   `copies` int(11) NOT NULL DEFAULT 0,
+  `total_pages` int(11) NOT NULL DEFAULT 0,
   `printer` text NOT NULL,
   `document_name` text DEFAULT NULL,
   `client` text NOT NULL,
@@ -31,8 +32,8 @@ CREATE TABLE IF NOT EXISTS `log_print` (
   `driver` text NOT NULL,
   `height` text DEFAULT NULL,
   `width` text DEFAULT NULL,
-  `duplex` text NOT NULL,
-  `color` text NOT NULL,
+  `duplex` int(11) NOT NULL DEFAULT 0,
+  `color` int(11) NOT NULL DEFAULT 0,
   `size` text DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
