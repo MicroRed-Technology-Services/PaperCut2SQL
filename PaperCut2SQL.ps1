@@ -13,6 +13,7 @@ $pcutInst = Get-Service -Name PCPrintLogger
 $pcutInst = $pcutInst.Status
 if(!$pcutInst -OR $pcutInst -ne 'Running'){
     Write-Warning "This script requires PaperCut print logger to be installed and running. https://www.papercut.com/products/free-software/print-logger/"
+    PAUSE
     exit    
 }
 
@@ -21,6 +22,7 @@ $netFramework = Get-WindowsFeature net-framework-45-core
 $netFramework = $netFramework.Installed
 if($netFramework -ne $true){
     Write-Warning "This script requires the .NET framework to be installed. https://dotnet.microsoft.com/en-us/download"
+    PAUSE
     exit
 }
 
@@ -29,6 +31,8 @@ if($netFramework -ne $true){
 $netSQL = Test-Path "C:\Program Files (x86)\MySQL\MySQL Connector NET 8.0.32\Assemblies\net7.0\MySql.Data.dll"
 if($netSQL -ne $true){
     Write-Warning "This script requires the MySQL connector for .NET to be installed. https://dev.mysql.com/downloads/connector/net/"
+    PAUSE
+    exit
 }
 
 # Load the MySQL connector for .NET
