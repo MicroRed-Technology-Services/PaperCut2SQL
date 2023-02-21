@@ -47,12 +47,12 @@ function disconnectSQL{
     $script:sqlConn.Close()
 }
 function doLog{
-    Param($pTime,$pUser,$pPages,$pCopies,$pPrinter,$pName,$pClient,$pPaper,$pDriver,$pHeight,$pWidth,$pDuplex,$pColor,$pSize)
+    Param($pTime,$pUser,$pPages,$pCopies,$pTotal,$pPrinter,$pName,$pClient,$pPaper,$pDriver,$pHeight,$pWidth,$pDuplex,$pColor,$pSize)
     connectSQL
 
     $script:SQL = New-Object MySql.Data.MySqlClient.MySqlCommand
     $script:SQL.Connection = $script:sqlConn
-    $script:SQL.CommandText = "INSERT INTO $sqlTbl (time, user, pages, copies, printer, document_name, client, paper_size, driver, height, width, duplex, color, size) VALUES (""$pTime"",""$pUser"",""$pPages"",""$pCopies"",""$pPrinter"",""$pName"",""$pClient"",""$pPaper"",""$pDriver"",""$pHeight"",""$pWidth"",""$pDuplex"",""$pColor"",""$pSize"")"
+    $script:SQL.CommandText = "INSERT INTO $sqlTbl (time, user, pages, copies, total_pages, printer, document_name, client, paper_size, driver, height, width, duplex, color, size) VALUES (""$pTime"",""$pUser"",""$pPages"",""$pCopies"",""$pTotal"",""$pPrinter"",""$pName"",""$pClient"",""$pPaper"",""$pDriver"",""$pHeight"",""$pWidth"",""$pDuplex"",""$pColor"",""$pSize"")"
     $script:SQL.ExecuteNonQuery()
 
     disconnectSQL
@@ -69,8 +69,9 @@ $csvI = Get-Content -LiteralPath $csv | Select-Object -Skip 1 | ConvertFrom-Csv
 foreach($job in $csvI){
     $pTime = $job.Time
     $pUser = $job.User
-    $pPages = $job.Pages
-    $pCopies = $job.Copies
+    [INT]$pPages = $job.Pages
+    [INT]$pCopies = $job.Copies
+    $pTotal = $pPages * $pCopies
     $pPrinter = $job.Printer
     $pName = $job.'Document Name'
     $pClient = $job.Client
@@ -79,10 +80,13 @@ foreach($job in $csvI){
     $pHeight = $job.Height
     $pWidth = $job.Width
     $pDuplex = $job.Duplex
+        if($pDuplex -eq "NOT DUPLEX"){$pDuplex = 0}
+        elseif($pDuplex -eq "DUPLEX"){$pDuplex = 1}
     $pColor = $job.Grayscale
         if($pColor -eq "NOT GRAYSCALE"){$pColor = 1}
         elseif($pColor -eq "GRAYSCALE"){$pColor = 0}
     $pSize = $job.Size
 
-    doLog -pTime $pTime -pUser $pUser -pPages $pPages -pCopies $pCopies -pPrinter $pPrinter -pName $pName -pClient $pClient -pPaper $pPaper -pDriver $pDriver -pHeight $pHeight -pWidth $pWidth -pDuplex $pDuplex -pColor $pColor -pSize $pSize
+    doLog -pTime $pTime -pUser $pUser -pPages $pPages -pCopies $pCopies -pTotal $pTotal -pPrinter $pPrinter -pName $pName -pClient $pClient -pPaper $pPaper -pDriver $pDriver -pHeight $pHeight -pWidth $pWidth -pDuplex $pDuplex -pColor $pColor -pSize $pSize
 }
+
